@@ -1,7 +1,7 @@
 
 /* Base – Mobile-first */
 :root {
-  /* Spacing scale (tweak to taste) */
+  /* Spacing scale */
   --space-1: 0.5rem;
   --space-2: 0.75rem;
   --space-3: 1rem;
@@ -9,12 +9,17 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
 
-  /* Optional: prevent iOS input zoom by keeping base font >= 16px */
+  /* Prevent iOS input zoom (keep base font >= 16px) */
   --base-font-size: 16px;
 }
 
 html {
   font-size: var(--base-font-size);
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden; /* avoid horizontal scroll in portrait */
 }
 
 main {
@@ -23,9 +28,15 @@ main {
   justify-content: space-between;
   align-items: center;
 
-  /* Mobile-friendly padding using clamp(min, preferred, max) */
+  /* Use dynamic viewport height to avoid iOS/Android 100vh issue */
+  min-height: 100dvh;
   padding: clamp(1rem, 4vw, 2rem);
-  min-height: 100vh;
+					
+}
+
+/* Fallback if dvh is not supported */
+@supports not (height: 100dvh) {
+  main { min-height: 100vh; }
 }
 
 /* Content wrapper (optional) */
@@ -39,15 +50,15 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.95rem; /* slightly larger for readability on phones */
+  font-size: 0.95rem; /* readable on phones */
   width: 100%;
   max-width: var(--max-width);
   z-index: 2;
   font-family: var(--font-mono);
   padding: var(--space-3) var(--space-4);
-
-  /* Let it flow normally on mobile to avoid overlay issues */
-  position: relative;
+  position: relative; /* prevent overlays on mobile */
+															  
+					 
 }
 
 .description a {
@@ -94,7 +105,7 @@ main {
   /* Better touch responsiveness */
   touch-action: manipulation;
 
-  /* Minimum tap target height (~44px) for mobile ergonomics */
+  /* Minimum tap target height (~44px) */
   min-height: 2.75rem;
 }
 
@@ -112,11 +123,11 @@ main {
 
 .card p {
   margin: 0;
-  opacity: 0.8;
+  opacity: 0.85;
   font-size: 0.95rem;
   line-height: 1.6;
-  /* slightly wider for mobile readability */
-  max-width: 40ch;
+  max-width: 40ch; /* readable text width */
+				  
 }
 
 /* Center section */
@@ -130,7 +141,7 @@ main {
   flex-wrap: wrap; /* prevents overflow on narrow phones */
 }
 
-/* Respect safe areas (iOS notches, etc.) */
+/* Safe-area support (iOS notches, home indicator) */
 @supports (padding: env(safe-area-inset-top)) {
   main {
     padding-top: calc(clamp(1rem, 4vw, 2rem) + env(safe-area-inset-top));
@@ -148,14 +159,14 @@ main {
     box-shadow: 0px 4px 12px 0px #CBBEFF;
   }
 
-  .card:hover span {
-    transform: translateX(4px);
-  }
+					
+  .card:hover span { transform: translateX(4px); }
+   
 
   @media (prefers-color-scheme: dark) {
-    .card:hover {
-      box-shadow: none;
-    }
+				 
+    .card:hover { box-shadow: none; }
+	 
   }
 }
 
@@ -168,16 +179,71 @@ main {
   }
 }
 
-/* -------- Breakpoints -------- */
+								   
+
+/* -------- Orientation Tweaks -------- */
+						   
+				
+					  
+   
+		   
+					  
+   
+ 
+
+/* Portrait (vertical) */
+@media (orientation: portrait) {
+  .grid {
+    grid-template-columns: 1fr; /* single column in portrait */
+    gap: clamp(0.75rem, 3vw, 1rem);
+    max-width: 100%;
+					   
+  }
+
+  .center {
+    gap: clamp(1rem, 4vw, 1.5rem);
+    padding: clamp(2rem, 8vw, 3rem) 0 clamp(1.5rem, 6vw, 2.5rem);
+    flex-wrap: wrap;
+  }
+
+  .card { padding: clamp(0.9rem, 4vw, 1.2rem); }
+
+  .card p {
+    max-width: 45ch; /* slightly wider for portrait */
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Ensure no overlays block content in portrait */
+  .description p,
+  .description div {
+    display: block;
+    position: static !important;
+    width: auto !important;
+    padding: var(--space-3);
+    background: none;
+    border: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Landscape (tilt) */
+@media (orientation: landscape) {
+  .grid {
+    gap: clamp(0.75rem, 2vw, 1rem);
+  }
+  .center {
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding: clamp(2rem, 6vw, 3rem) 0;
+  }
+}
+
+/* -------- Width Breakpoints -------- */
 
 /* Small phones */
 @media (max-width: 480px) {
-  .description {
-    font-size: 0.9rem;
-  }
-  .card p {
-    font-size: 0.9rem;
-  }
+  .description { font-size: 0.9rem; }
+  .card p     { font-size: 0.9rem; }
 }
 
 /* Mobile (<=700px) */
@@ -188,26 +254,8 @@ main {
     max-width: 100%;
     text-align: center;
   }
-
-  .card {
-    padding: clamp(1rem, 4vw, 1.25rem);
-  }
-
-  .center {
-    padding: clamp(3rem, 10vw, 4rem) 0 clamp(2rem, 8vw, 3rem);
-  }
-
-  /* Remove fixed overlays to prevent content being obscured on mobile */
-  .description p,
-  .description div {
-    display: block; /* flex not needed */
-    position: static;
-    width: auto;
-    padding: var(--space-3);
-    background: none;
-    border: none;
-    backdrop-filter: none;
-  }
+  .card   { padding: clamp(1rem, 4vw, 1.25rem); }
+  .center { padding: clamp(3rem, 10vw, 4rem) 0 clamp(2rem, 8vw, 3rem); }
 }
 
 /* Tablet and Smaller Desktop (2 cols) */
@@ -220,9 +268,9 @@ main {
 
 /* Large Desktop (4 cols, original look) */
 @media (min-width: 1121px) {
-  main {
-    padding: 6rem; /* match original desktop */
-  }
+		
+  main { padding: 6rem; } /* match original desktop */
+   
   .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     max-width: 100%;
@@ -240,5 +288,5 @@ main {
 /* Rotation keyframes (kept; disabled under reduced motion) */
 @keyframes rotate {
   from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
+  to   { transform: rotate(0deg); }
 }
