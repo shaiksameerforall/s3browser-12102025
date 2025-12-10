@@ -1,3 +1,4 @@
+/*
 .main {
   display: flex;
   flex-direction: column;
@@ -81,7 +82,7 @@
   gap: 4rem;
 }
 
-/* Enable hover only on non-touch devices */
+/* Enable hover only on non-touch devices 
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
     background: rgba(var(--card-rgb), 0.1);
@@ -106,7 +107,7 @@
   }
 }
 
-/* Mobile */
+/* Mobile 
 @media (max-width: 700px) {
   .content {
     padding: 4rem;
@@ -183,7 +184,7 @@
   }
 }
 
-/* Tablet and Smaller Desktop */
+/* Tablet and Smaller Desktop 
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
@@ -204,4 +205,229 @@
   to {
     transform: rotate(0deg);
   }
+}
+*/
+
+
+/* Base – Mobile-first */
+:root {
+  /* You can tweak these to taste */
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.25rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+}
+
+/* Ensure proper scaling on mobile: add in HTML <meta name="viewport" content="width=device-width, initial-scale=1"> */
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Mobile-friendly padding using clamp(min, preferred, max) */
+  padding: clamp(1rem, 4vw, 2rem);
+  min-height: 100vh;
+}
+
+/* Content wrapper (optional) */
+.content {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.description {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: var(--max-width);
+  z-index: 2;
+  font-family: var(--font-mono);
+  padding: var(--space-3) var(--space-4);
+  /* Let it flow normally on mobile to avoid overlay issues */
+  position: relative;
+}
+
+.description a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--border-radius);
+}
+
+.description p {
+  position: relative;
+  margin: 0;
+  padding: var(--space-3);
+  background-color: rgba(var(--callout-rgb), 0.5);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: var(--border-radius);
+}
+
+.code {
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+/* Grid – stack on mobile */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.75rem, 2vw, 1rem);
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.card {
+  padding: clamp(0.9rem, 2.5vw, 1.2rem);
+  border-radius: var(--border-radius);
+  background: rgba(var(--card-rgb), 0);
+  border: 1px solid rgba(var(--card-border-rgb), 0);
+  transition: background 200ms, border 200ms, box-shadow 200ms;
+  touch-action: manipulation; /* better touch responsiveness */
+}
+
+.card span {
+  display: inline-block;
+  transition: transform 200ms;
+}
+
+.card h2 {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.card p {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 40ch; /* slightly wider for mobile readability */
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: clamp(2rem, 6vw, 3rem) 0;
+  gap: clamp(1.5rem, 4vw, 2rem);
+}
+
+/* Respect safe areas (iOS notches, etc.) */
+@supports (padding: env(safe-area-inset-top)) {
+  main {
+    padding-top: calc(clamp(1rem, 4vw, 2rem) + env(safe-area-inset-top));
+    padding-bottom: calc(clamp(1rem, 4vw, 2rem) + env(safe-area-inset-bottom));
+    padding-left: calc(clamp(1rem, 4vw, 2rem) + env(safe-area-inset-left));
+    padding-right: calc(clamp(1rem, 4vw, 2rem) + env(safe-area-inset-right));
+  }
+}
+
+/* Hover only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    background: rgba(var(--card-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    box-shadow: 0px 4px 12px 0px #CBBEFF;
+  }
+
+  .card:hover span {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .card:hover {
+      box-shadow: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion) {
+  .card:hover span {
+    transform: none;
+  }
+}
+
+/* -------- Breakpoints -------- */
+
+/* Small phones: keep things minimal */
+@media (max-width: 480px) {
+  .description {
+    font-size: 0.85rem;
+  }
+  .card p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+    margin-bottom: clamp(2rem, 8vw, 4rem);
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .card {
+    padding: clamp(1rem, 4vw, 1.25rem);
+  }
+
+  .center {
+    padding: clamp(3rem, 10vw, 4rem) 0 clamp(2rem, 8vw, 3rem);
+  }
+
+  /* Remove fixed overlays to prevent content being obscured on mobile */
+  .description p,
+  .description div {
+    display: block; /* flex not needed */
+    position: static;
+    width: auto;
+    padding: var(--space-3);
+    background: none;
+    border: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Tablet and Smaller Desktop */
+@media (min-width: 701px) and (max-width: 1120px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.25rem);
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1121px) {
+  main {
+    padding: 6rem; /* match your original desktop look */
+  }
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 100%;
+    width: var(--max-width);
+  }
+}
+
+/* Dark scheme tweaks */
+@media (prefers-color-scheme: dark) {
+  .logo {
+    filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
+  }
+}
+
+@keyframes rotate {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
 }
