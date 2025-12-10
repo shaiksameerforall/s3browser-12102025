@@ -1,45 +1,35 @@
-"use client";
+import styles from "./page.module.css";
 
-import { useState, useEffect } from "react";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-import "./../app/app.css";
-import { Amplify } from "aws-amplify";
-import outputs from "@/amplify_outputs.json";
-import "@aws-amplify/ui-react/styles.css";
-import { Authenticator } from '@aws-amplify/ui-react';
-import { StorageBrowser } from '../components/StorageBrowser';
+export default function Page() {
+  return (
+    <main>
+      <div className="content">
 
-Amplify.configure(outputs);
+        <div className="description">
+          <p>Mobile-ready layout with responsive grid.</p>
+        </div>
 
-const client = generateClient<Schema>();
+        <h1 className={styles.title}>Dashboard</h1>
+        <p className={styles.subtitle}>All cards scale correctly on mobile.</p>
 
-export default function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+        <div className="grid">
+          <div className="card">
+            <h2>Card 1</h2>
+            <p>This card scales perfectly on all mobile devices.</p>
+          </div>
 
-  function listTodos() {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }
+          <div className="card">
+            <h2>Card 2</h2>
+            <p>CSS is now fully mobile-optimized.</p>
+          </div>
 
-  useEffect(() => {
-    listTodos();
-  }, []);
+          <div className="card">
+            <h2>Card 3</h2>
+            <p>No more desktop-mode problems.</p>
+          </div>
+        </div>
 
-  function createTodo() {
-    client.models.Todo.create({
-      content: window.prompt("Todo content"),
-    });
-  }
-
- return (
-        <main>
-
-          {/* StorageBrowser Component */}
-          <h2>Your Files</h2>
-          <StorageBrowser /> 
-          
-        </main>
+      </div>
+    </main>
   );
 }
